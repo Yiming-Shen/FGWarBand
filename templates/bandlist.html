@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bands</title>
+<style>
+table, th, td { border: 1px solid black; text-align: left; }
+</style>
+</head>
+<body>
+<h1>Bands</h1>
+<table>
+{% for band in bands %}
+<tr><td><a href="/edit/{{band}}">{{band}}</a></td><td><a href="/delete/{{band}}">Delete</a></td></tr>
+{% endfor %}
+</table>
+
+</form>
+</body>
+</html>
+

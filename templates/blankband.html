@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ship Crew Editor</title>
+<style>
+table, th, td { border: 1px solid black; text-align: left; }
+</style>
+<script type="text/javascript">
+  var total = 500;
+  var engHire = false;
+ 
+  function hireEng()
+			{
+				if(engHire == false)
+				{
+					engHire = true;
+					document.getElementById("ensignDiv").style.display = "block";
+					total = total - 200;
+					updateCost();
+				}
+				else
+				{
+					engHire = false;
+					document.getElementById("ensignDiv").style.display = "none";
+					total = total + 200;
+					updateCost();
+				}
+			}
+
+  function updateTableRow(row, x)
+			{
+				var sel = x.value;
+				
+				var myTable = document.getElementById('rosterTable');
+
+				if(sel == "Empty")
+				{
+					myTable.rows[row].cells[1].innerHTML = '-';
+					myTable.rows[row].cells[2].innerHTML = '-';
+					myTable.rows[row].cells[3].innerHTML = '-';
+					myTable.rows[row].cells[4].innerHTML = '-';
+					myTable.rows[row].cells[5].innerHTML = '-'
+					myTable.rows[row].cells[6].innerHTML = '-';
+					myTable.rows[row].cells[7].innerHTML = 0;
+					myTable.rows[row].cells[8].innerHTML = '-';
+				}
+                                {% for troop in people.keys() %}
+                                if(sel == "{{troop}}")
+                                {
+                                        myTable.rows[row].cells[1].innerHTML = '{{ people[troop]['Move'] }}';
+                                        myTable.rows[row].cells[2].innerHTML = '{{ people[troop]['Fight'] }}';
+                                        myTable.rows[row].cells[3].innerHTML = '{{ people[troop]['Shoot'] }}';
+                                        myTable.rows[row].cells[4].innerHTML = '{{ people[troop]['Shield'] }}';
+                                        myTable.rows[row].cells[5].innerHTML = '{{ people[troop]['Morale'] }}';
+                                        myTable.rows[row].cells[6].innerHTML = '{{ people[troop]['Health'] }}';
+                                        myTable.rows[row].cells[7].innerHTML = {{ people[troop]['Cost'] }};
+                                        myTable.rows[row].cells[8].innerHTML = '{{ people[troop]['Notes'] }}';
+
+                                }
+                                {% endfor %}
+                                updateCost();
+                        }
+  function updateCost()
+			{
+				var sum = 0;
+				var myTable = document.getElementById('rosterTable');
+				
+				for(i = 1; i <= 8; i++)
+				{
+					sum = sum + parseInt(myTable.rows[i].cells[7].innerHTML);
+				}
+				
+				
+				
+				remainingGold.innerHTML = total - sum ;
+			}
+
+   function setCapSkillchoice(x)
+   {                          
+                               var choice = x.value;
+                               var myTable = document.getElementById('wizardTable');
+                                var list = myTable.rows[1].cells[8];         
+                                        while (list.hasChildNodes()) {
+                                              list.removeChild(list.firstChild);
+                                        }
+                               if(choice == "Empty")
+			       {        
+             				 list.appendChild(document.createTextNode("No Skills"));
+			       }
+                               {% for spec in skills.keys() %}
+                               if(choice == "{{spec}}")
+                               {
+                                        var div = document.createElement("div");
+ 					{% for element in skills[spec] %}
+                                           var tempbutton = document.createElement("input");
+					   tempbutton.setAttribute("type", "radio");
+					   tempbutton.setAttribute("id", "skillchoice");
+					   tempbutton.setAttribute("name", "skillchoice");
+					   tempbutton.setAttribute("value", "{{element}}");
+                                           var templabel = document.createElement("label");
+                                           templabel.appendChild(document.createTextNode("{{element}}"));
+                                           div.appendChild(tempbutton);
+					   div.appendChild(templabel);
+  					{% endfor %}
+                                        list.appendChild(div);
+                                        
+             
+                               }            
+                               {% endfor %}
+   }
+
+    function setEnsSkillchoice(x)
+   {
+                               var choice = x.value;
+                               var myTable = document.getElementById('ensignTable');
+                                var list = myTable.rows[1].cells[8];
+                                        while (list.hasChildNodes()) {
+                                              list.removeChild(list.firstChild);
+                                        }
+                               if(choice == "Empty")
+                               {
+                                         list.appendChild(document.createTextNode("No Skills"));
+                               }
+                               {% for spec in skills.keys() %}
+                               if(choice == "{{spec}}")
+                               {
+                                        var div = document.createElement("div");
+                                        {% for element in skills[spec] %}
+                                           var tempbutton = document.createElement("input");
+                                           tempbutton.setAttribute("type", "radio");
+                                           tempbutton.setAttribute("id", "skillchoiceens");
+                                           tempbutton.setAttribute("name", "skillchoiceens");
+                                           tempbutton.setAttribute("value", "{{element}}");
+                                           var templabel = document.createElement("label");
+                                           templabel.appendChild(document.createTextNode("{{element}}"));
+                                           div.appendChild(tempbutton);
+                                           div.appendChild(templabel);
+                                        {% endfor %}
+                                        list.appendChild(div);
+
+
+                               }
+                               {% endfor %}
+   }
+   
+   function doFormSubmit()
+   {
+     method =  "post"; // Set method to post by default if not specified.
+
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", "/new");
+ 
+
+    /*  bandname = request.form['bandname']
+       capspec = request.form['capspec']
+       ensspec = request.form['ensspec']
+       capskill = request.form['capskill']
+       ensskill = request.form['ensskill']
+       capweap = request.form['capweap']
+       ensweap = request.form['ensweap']
+       troops = json.loads(request.form['troops']) */
+
+    var bandname = document.createElement("input");
+            bandname.setAttribute("type", "hidden");
+            bandname.setAttribute("name", "bandname");
+            bandname.setAttribute("value", document.getElementById('bandnametext').value);
+            form.appendChild(bandname);
+     var capspec = document.createElement("input");
+            capspec.setAttribute("type", "hidden");
+            capspec.setAttribute("name", "capspec");
+            capspec.setAttribute("value", document.getElementById('capspecsel').value);
+            form.appendChild(capspec);
+     var capskill = document.createElement("input");
+            capskill.setAttribute("type", "hidden");
+            capskill.setAttribute("name", "capskill");
+            capskill.setAttribute("value", document.getElementById('skillchoice').value);
+            form.appendChild(capskill);
+     var capweap = document.createElement("input");
+            capweap.setAttribute("type", "hidden");
+            capweap.setAttribute("name", "capweap");
+            capweap.setAttribute("value", document.getElementById('capweapsel').value);
+            form.appendChild(capweap);
+     if (engHire)
+     {
+      var hasensign = document.createElement("input");
+            hasensign.setAttribute("type", "hidden");
+            hasensign.setAttribute("name", "hasensign");
+            hasensign.setAttribute("value", engHire);
+            form.appendChild(hasensign);
+      var ensspec = document.createElement("input");
+            ensspec.setAttribute("type", "hidden");
+            ensspec.setAttribute("name", "ensspec");
+            ensspec.setAttribute("value", document.getElementById('ensskillsel').value);
+            form.appendChild(ensspec);
+     var ensskill = document.createElement("input");
+            ensskill.setAttribute("type", "hidden");
+            ensskill.setAttribute("name", "ensskill");
+            ensskill.setAttribute("value", document.getElementById('skillchoiceens').value);
+            form.appendChild(ensskill);
+     var ensweap = document.createElement("input");
+            ensweap.setAttribute("type", "hidden");
+            ensweap.setAttribute("name", "ensweap");
+            ensweap.setAttribute("value", document.getElementById('ensweapsel').value);
+            form.appendChild(ensweap);
+       }
+
+     var troopsarr = []
+                                for(i = 1; i < 11; i++)
+                                {       
+                                        var selector = document.getElementById('troop'+i);
+                                        troopsarr.push(selector.value);
+                                }
+     var troops = document.createElement("input");
+            troops.setAttribute("type", "hidden");
+            troops.setAttribute("name", "troops");
+            troops.setAttribute("value", JSON.stringify(troopsarr));
+            form.appendChild(troops);
+
+
+    document.body.appendChild(form);
+    form.submit();
+   }
+</script>
+</head>
+<body>
+
+<h1>Warband</h1>
+<h2>Warband Name:<input type="text" id="bandnametext" name="bandnametext"></h2>
+
+                <table border="0">
+                        <tr>
+<td><h3>Currency remaining: </h3></td>
+                                <td id='remainingGold'>500</td>
+                        </tr>
+                </table>
+<table id="wizardTable">
+<tr>
+                                <td>Move</td>
+                                <td>Fight</td>
+                                <td>Shoot</td>
+                                <td>Shield</td>
+                                <td>Morale</td>
+                                <td>Health</td>
+                                <td>Specialism</td>
+                                <td>Weapons and Equipment</td>
+                                <td>Skills</td>
+                        </tr>
+<tr>
+ 
+                               <td>{{wizard['Captain']['Move']}}</td>
+				<td>{{wizard['Captain']['Fight']}}</td>
+                                <td>{{wizard['Captain']['Shoot']}}</td>
+                                <td>{{wizard['Captain']['Shield']}}</td>
+                                <td>{{wizard['Captain']['Morale']}}</td>
+                                <td>{{wizard['Captain']['Health']}}</td>
+                      
+                                <td><select id="capspecsel" onchange="setCapSkillchoice(this)">
+                                                <option value="Empty">Select...</option>
+                                                {% for spec in specs %}
+
+                                                <option value="{{ spec }}">{{ spec }}</option>
+                                                {% endfor %}
+                                        </select></td>
+                                <td>
+<select id="capweapsel">
+                                                <option value="Empty">Select...</option>
+                                                {% for weap in weaps %}
+
+                                                <option value="{{ weap }}">{{ weap }}</option>
+                                                {% endfor %}
+                                        </select>
+</td>
+                                <td></td>
+                        </tr>
+
+</table>
+Hire apprentice? <input type="checkbox" name="appHire" onClick="hireEng()">200gc<br>
+<div id="ensignDiv" style='display: none'>
+<table id="ensignTable">
+<tr>
+                                <td>Move</td>
+                                <td>Fight</td>
+                                <td>Shoot</td>
+                                <td>Shield</td>
+                                <td>Morale</td>
+                                <td>Health</td>
+                                <td>Specialism</td>
+                                <td>Weapons and Equipment</td>
+                                <td>Skills</td>
+                        </tr>
+<tr>
+ <td>{{apprentice['Ensign']['Move']}}</td>
+                                <td>{{apprentice['Ensign']['Fight']}}</td>
+                                <td>{{apprentice['Ensign']['Shoot']}}</td>
+                                <td>{{apprentice['Ensign']['Shield']}}</td>
+                                <td>{{apprentice['Ensign']['Morale']}}</td>
+                                <td>{{apprentice['Ensign']['Health']}}</td>
+                                <td>
+<select id="ensskillsel" onchange="setEnsSkillchoice(this)">
+  						<option value="Empty">Select...</option>
+                                                {% for spec in specs %}
+						
+  						<option value="{{ spec }}">{{ spec }}</option>
+                                                {% endfor %}
+  					</select>
+</td>
+                                <td>
+<select id="ensweapsel">
+                                                <option value="Empty">Select...</option>
+                                                {% for weap in weaps %}
+
+                                                <option value="{{ weap }}">{{ weap }}</option>
+                                                {% endfor %}
+                                        </select>
+</td>
+                                <td></td>
+                        </tr>
+
+</table>
+</div>
+<table id='rosterTable'>
+<tr>
+				<td>Class</td>
+				<td>Move</td>
+				<td>Fight</td>
+				<td>Shoot</td>
+				<td>Shield</td>
+				<td>Morale</td>
+				<td>Health</td>
+				<td>Cost</td>
+				<td>Notes</td>
+			</tr>
+{% for i in range(1,11) %}
+<tr>
+<td>
+<select id="troop{{i}}" onchange="updateTableRow({{ i }}, this)">
+   <option value="Empty">Empty</option>
+     {% for troop in people.keys() %}
+        <option value="{{ troop }}">{{ troop }}</option>
+      {% endfor %}
+</select>
+</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>-</td>
+                        </tr>
+{% endfor %}
+</table>
+<input id="creator" type="button" value="Create Warband" onclick="doFormSubmit();" />
+<input id="clear" type="button" value="Reset" onclick="window.location.href='/new'" />
+</body>
+</html>
+
