@@ -13,54 +13,76 @@ p6
 sS'Items'
 p7
 (lp8
-VNeedle Gun
+VBlaster
 p9
-aVNeedle Gun
+aVBlaster
 p10
-asS'Move'
+aVNeedle Gun
 p11
-V5
+aVNeedle Gun
 p12
-sS'Experience'
+aVNeedle Gun
 p13
-V0
+asS'Move'
 p14
-sS'Fight'
+V5
 p15
-V2
+sS'Experience'
 p16
-sS'Morale'
+V0
 p17
-V4
+sS'Fight'
 p18
-sS'Skillset'
+V2
 p19
-(lp20
-VAim
+sS'Morale'
+p20
+V4
 p21
-aVAim
+sS'Skillset'
 p22
+(lp23
+VRepair
+p24
+aVSabotage
+p25
+aVRepair
+p26
+aVSabotage
+p27
+aVAim
+p28
+aVAim
+p29
+aVAim
+p30
 asS'Cost'
-p23
+p31
 I0
 sS'Health'
-p24
+p32
 V12
-p25
-sS'Specialism'
-p26
-VMarksman
-p27
-ssS'Treasury'
-p28
-I326
-sS'Name'
-p29
-Vtiff
-p30
-sS'Troops'
-p31
-(lp32
-VCombat Droid
 p33
+sS'Specialism'
+p34
+VMarksman
+p35
+ssS'Treasury'
+p36
+I244
+sS'Name'
+p37
+Vtiff
+p38
+sS'Troops'
+p39
+(lp40
+VCombat Droid
+p41
+aVAugment Gorilla
+p42
+aVAugment Gorilla
+p43
+aVAugment Gorilla
+p44
 as.
