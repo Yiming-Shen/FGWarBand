@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <script>
+        var namecheck = false;
+        var passwordcheck1 = false;
+        var passwordcheck2 = false;
+        function checkRegister() {
+            var user = document.getElementById("user").value;
+            var key1 = document.getElementById("password1").value;
+            var key2 = document.getElementById("password2").value;
+            checkName(user)
+            checkPassword1(key1)
+            checkPassword2(key2)
+            if (namecheck && passwordcheck1 && passwordcheck2){
+                method = "post";
+                var form = document.createElement("form");
+                form.setAttribute("method", method)
+                var name = document.createElement("input");
+                name.setAttribute("type", "hidden");
+                name.setAttribute("name", "name");
+                name.setAttribute("value", user);
+                form.appendChild(name);
+                var password = document.createElement("input");
+                password.setAttribute("type", "hidden");
+                password.setAttribute("name", "password");
+                password.setAttribute("value", key1);
+                form.appendChild(password);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        function checkName(name) {
+            if(isNaN(name)){
+                {% for users in accounts.keys() %}
+                    if (name == "{{ users }}"){
+                        document.getElementById("accountname").innerHTML = "Account name not available!";
+                        return false;
+                    }
+                {% endfor %}
+                namecheck = true;
+                document.getElementById("accountname").innerHTML = "Account name checked.";
+            }
+            else{
+                document.getElementById("accountname").innerHTML = "At least one charactor!";
+            }
+
+        }
+        function checkPassword1(password) {
+            if(isNaN(password)){
+                passwordcheck1 = true;
+                document.getElementById("pass1").innerHTML = "Password checked";
+            }
+            else{
+                document.getElementById("pass1").innerHTML = "At least one charactor!";
+            }
+            checkPassword2(document.getElementById("password2").value);
+        }
+        function checkPassword2(password) {
+            var key1 = document.getElementById("password1").value;
+            if (key1 == password){
+                passwordcheck2 = true;
+                document.getElementById("pass2").innerHTML = "Password checked";
+            }
+            else{
+                document.getElementById("pass2").innerHTML = "Password not match";
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Welcome to FG Warband</h1>
+<p>Please enter your information to complete the registration: </p>
+<table>
+    <tr>
+        <td><h3>Account: </h3></td>
+        <td><input type="text" id="user" onblur="checkName(this.value)"></td>
+        <td><h3 id="accountname"></h3></td>
+    </tr>
+    <tr>
+        <td><h3>Set password: </h3></td>
+        <td><input type="password" id="password1" onblur="checkPassword1(this.value)"></td>
+        <td><h3 id="pass1"></h3></td>
+    </tr>
+    <tr>
+        <td><h3>Repeat password: </h3></td>
+        <td><input type="password" id="password2" oninput="checkPassword2(this.value)"></td>
+        <td><h3 id="pass2"></h3></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="button" value="Register" onclick="checkRegister()"></td>
+    </tr>
+</table>
+<h1></h1>
+Already have an account? <input type="button" value="Login" onclick="window.location.href='/login'">
+</body>
+</html>

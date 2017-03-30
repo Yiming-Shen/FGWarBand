@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ship Crew Editor</title>
+    <title>New Band</title>
     <style>
         table, th, td {
             border: 1px solid black;
@@ -11,19 +11,111 @@
     <script type="text/javascript">
         var total = 500;
         var engHire = false;
+        var bandpub = "private";
+        var loadedweap = ["Empty", "Empty"];
+        var ensweap = "Empty";
+        var encost = {{ apprentice['Ensign']['Cost'] }};
+        var rows = 9;
+        var sum = 0;
+
+        function showMoney() {
+            remainingGold.innerHTML = total - sum;
+        }
+
+        function public() {
+            if (bandpub == "private") {
+                bandpub = "public";
+            }
+            else {
+                bandpub = "private";
+            }
+        }
+
+        function addMoney(amount) {
+            if (isNaN(amount)) {
+                notices.innerHTML = "Please input number!"
+            }
+            else {
+                amount = parseInt(amount)
+                if (amount >= 0) {
+                    notices.innerHTML = "";
+                    total += amount;
+                } else {
+                    notices.innerHTML = "Amount must larger than 0!"
+                }
+                showMoney();
+            }
+
+        }
 
         function hireEng() {
             if (engHire == false) {
                 engHire = true;
                 document.getElementById("ensignDiv").style.display = "block";
-                total = total - 200;
+                total -= encost;
                 updateCost();
+                countCheck();
             }
             else {
                 engHire = false;
                 document.getElementById("ensignDiv").style.display = "none";
-                total = total + 200;
+                total += encost;
                 updateCost();
+                countCheck();
+            }
+        }
+
+        function countMembers() {
+            var myTable = document.getElementById('rosterTable');
+            var num = 0;
+            for (var i = 1; i <= rows; i++) {
+                if (myTable.rows[i].cells[7].innerHTML != 0) {
+                    num++;
+                }
+            }
+            return num;
+        }
+
+        function countCheck() {
+            var num = countMembers();
+            if (engHire == true) {
+                document.getElementById("encheck").disabled = false;
+                document.getElementById("test").innerHTML = num + 2;
+                var myTable = document.getElementById('rosterTable');
+                if (num == 8) {
+                    //disable one
+                    for (var i = 1; i <= rows; i++) {
+                        if (myTable.rows[i].cells[7].innerHTML == 0) {
+                            var toopid = "troop" + String(i);
+                            document.getElementById(toopid).disabled = true;
+                        }
+                    }
+                } else {
+                    //enable all
+                    for (var i = 1; i <= rows; i++) {
+                        var toopid = "troop" + String(i);
+                        document.getElementById(toopid).disabled = false;
+                    }
+                }
+            } else {
+                document.getElementById("test").innerHTML = num + 1;
+                for (var i = 1; i <= rows; i++) {
+                    var toopid = "troop" + String(i);
+                    document.getElementById(toopid).disabled = false;
+                }
+                if (num == 9) {
+                    document.getElementById("encheck").disabled = true;
+                } else {
+                    document.getElementById("encheck").disabled = false;
+                }
+            }
+        }
+
+        function currencyCheck() {
+            if (parseInt(document.getElementById("remainingGold").innerHTML) < 0) {
+                document.getElementById("creator").disabled = true;
+            } else {
+                document.getElementById("creator").disabled = false;
             }
         }
 
@@ -52,21 +144,54 @@
                     myTable.rows[row].cells[6].innerHTML = '{{ people[troop]['Health'] }}';
                     myTable.rows[row].cells[7].innerHTML = {{ people[troop]['Cost'] }};
                     myTable.rows[row].cells[8].innerHTML = '{{ people[troop]['Notes'] }}';
-
                 }
             {% endfor %}
+            countCheck();
             updateCost();
         }
         function updateCost() {
-            var sum = 0;
+            sum = 0;
             var myTable = document.getElementById('rosterTable');
 
-            for (i = 1; i <= 8; i++) {
+            for (i = 1; i <= rows; i++) {
                 sum = sum + parseInt(myTable.rows[i].cells[7].innerHTML);
             }
-
-
             remainingGold.innerHTML = total - sum;
+            currencyCheck();
+        }
+
+        function setCapWeapen(x, no) {
+            var weapen = x.value;
+            {% for weap,cost in weapcost.items(): %}
+                if (loadedweap[no] == "{{ weap }}") {
+                    total +=
+                    {{ cost }}
+                }
+            {% endfor %}
+            {% for weap,cost in weapcost.items() %}
+                if (weapen == "{{ weap }}") {
+                    total -= {{ cost }};
+                }
+            {% endfor %}
+            loadedweap[no] = weapen;
+            showMoney();
+
+        }
+
+        function setEnsWeapon(x) {
+            var weapen = x.value;
+            {% for weap,cost in weapcost.items(): %}
+                if (ensweap == "{{ weap }}") {
+                    total += {{ cost }};
+                }
+            {% endfor %}
+            {% for weap,cost in weapcost.items() %}
+                if (weapen == "{{ weap }}") {
+                    total -= {{ cost }};
+                }
+            {% endfor %}
+            ensweap = weapen;
+            showMoney();
         }
 
         function setCapSkillchoice(x) {
@@ -85,7 +210,6 @@
                     {% for element in skills[spec] %}
                         var tempbutton = document.createElement("input");
                         tempbutton.setAttribute("type", "radio");
-                        tempbutton.setAttribute("id", "skillchoice");
                         tempbutton.setAttribute("name", "skillchoice");
                         tempbutton.setAttribute("value", "{{element}}");
                         var templabel = document.createElement("label");
@@ -116,7 +240,6 @@
                     {% for element in skills[spec] %}
                         var tempbutton = document.createElement("input");
                         tempbutton.setAttribute("type", "radio");
-                        tempbutton.setAttribute("id", "skillchoiceens");
                         tempbutton.setAttribute("name", "skillchoiceens");
                         tempbutton.setAttribute("value", "{{element}}");
                         var templabel = document.createElement("label");
@@ -131,6 +254,7 @@
             {% endfor %}
         }
 
+
         function doFormSubmit() {
             method = "post"; // Set method to post by default if not specified.
 
@@ -138,36 +262,48 @@
             form.setAttribute("method", method);
             form.setAttribute("action", "/new");
 
-
-            /*  bandname = request.form['bandname']
-             capspec = request.form['capspec']
-             ensspec = request.form['ensspec']
-             capskill = request.form['capskill']
-             ensskill = request.form['ensskill']
-             capweap = request.form['capweap']
-             ensweap = request.form['ensweap']
-             troops = json.loads(request.form['troops']) */
-
             var bandname = document.createElement("input");
             bandname.setAttribute("type", "hidden");
             bandname.setAttribute("name", "bandname");
             bandname.setAttribute("value", document.getElementById('bandnametext').value);
             form.appendChild(bandname);
+            var currency = document.createElement("input");
+            currency.setAttribute("type", "hidden");
+            currency.setAttribute("name", "currency");
+            currency.setAttribute("value", document.getElementById('remainingGold').innerHTML);
+            form.appendChild(currency);
+            var pub = document.createElement("input");
+            pub.setAttribute("type", "hidden");
+            pub.setAttribute("name", "pub");
+            pub.setAttribute("value", bandpub);
+            form.appendChild(pub);
             var capspec = document.createElement("input");
             capspec.setAttribute("type", "hidden");
             capspec.setAttribute("name", "capspec");
             capspec.setAttribute("value", document.getElementById('capspecsel').value);
             form.appendChild(capspec);
+            var capskills;
+            var capskillarr = document.getElementsByName('skillchoice');
+            for (var k = 0; k < capskillarr.length; k++) {
+                if (capskillarr[k].checked) {
+                    capskills = capskillarr[k].value;
+                }
+            }
             var capskill = document.createElement("input");
             capskill.setAttribute("type", "hidden");
             capskill.setAttribute("name", "capskill");
-            capskill.setAttribute("value", document.getElementById('skillchoice').value);
+            capskill.setAttribute("value", capskills);
             form.appendChild(capskill);
-            var capweap = document.createElement("input");
-            capweap.setAttribute("type", "hidden");
-            capweap.setAttribute("name", "capweap");
-            capweap.setAttribute("value", document.getElementById('capweapsel').value);
-            form.appendChild(capweap);
+            var capweap1 = document.createElement("input");
+            capweap1.setAttribute("type", "hidden");
+            capweap1.setAttribute("name", "capweap1");
+            capweap1.setAttribute("value", document.getElementById('capweapsel1').value);
+            form.appendChild(capweap1);
+            var capweap2 = document.createElement("input");
+            capweap2.setAttribute("type", "hidden");
+            capweap2.setAttribute("name", "capweap2");
+            capweap2.setAttribute("value", document.getElementById('capweapsel2').value);
+            form.appendChild(capweap2);
             if (engHire) {
                 var hasensign = document.createElement("input");
                 hasensign.setAttribute("type", "hidden");
@@ -179,10 +315,17 @@
                 ensspec.setAttribute("name", "ensspec");
                 ensspec.setAttribute("value", document.getElementById('ensskillsel').value);
                 form.appendChild(ensspec);
+                var ensskills;
+                var ensskillarr = document.getElementsByName("skillchoiceens");
+                for (k = 0; k < ensskillarr.length; k++) {
+                    if (ensskillarr[k].checked) {
+                        ensskills = ensskillarr[k].value;
+                    }
+                }
                 var ensskill = document.createElement("input");
                 ensskill.setAttribute("type", "hidden");
                 ensskill.setAttribute("name", "ensskill");
-                ensskill.setAttribute("value", document.getElementById('skillchoiceens').value);
+                ensskill.setAttribute("value", ensskills);
                 form.appendChild(ensskill);
                 var ensweap = document.createElement("input");
                 ensweap.setAttribute("type", "hidden");
@@ -191,10 +334,12 @@
                 form.appendChild(ensweap);
             }
 
-            var troopsarr = []
-            for (i = 1; i < 11; i++) {
+            var troopsarr = [];
+            for (i = 1; i < 10; i++) {
                 var selector = document.getElementById('troop' + i);
-                troopsarr.push(selector.value);
+                if (selector) {
+                    troopsarr.push(selector.value);
+                }
             }
             var troops = document.createElement("input");
             troops.setAttribute("type", "hidden");
@@ -204,21 +349,74 @@
 
 
             document.body.appendChild(form);
-            form.submit();
+            var nameused = false;
+            {% for usedname in userbands %}
+                if (bandname.value == "{{ usedname }}"){nameused = true;}
+            {% endfor %}
+            if (document.getElementById("encheck").checked){
+                if (bandname.value == ""){
+                    notices.innerHTML="Band name must be specified.";
+                }else {
+                    if(nameused){notices.innerHTML="Band name used.";}
+                    else{if(capspec.value == "Empty"){
+                        notices.innerHTML="Captain specialism must be specifeid.";
+                    }
+                    else{
+                        if(ensspec.value == "Empty"){
+                            notices.innerHTML="Ensign specialism must be specifeid.";
+                        }
+                        else {form.submit();}
+                    }}
+
+                }
+            }else{
+                if (bandname.value == ""){
+                    notices.innerHTML="Band name must be specified.";
+                }else{
+                    if(nameused){notices.innerHTML="Band name used.";}
+                    else{
+                        if(capspec.value == "Empty"){
+                        notices.innerHTML="Captain specialism must be specifeid.";
+                    }
+                    else {form.submit();}
+                    }
+
+                }
+            }
         }
+
+
     </script>
 </head>
 <body>
-
-<h1>Warband</h1>
-<h2>Warband Name:<input type="text" id="bandnametext" name="bandnametext"></h2>
-
+<menu type="toolbar">
+    <button type="button" onclick="window.location.href='/myaccount'">Myaccount</button>
+    <button type="button" onclick="window.location.href='/view'">View Others</button>
+    <button type="button" onclick="window.location.href='/logout'">Logout</button>
+    <h3 id="notices"></h3>
+</menu>
+<h1>Creating new band!</h1>
+<h2>Warband Name:<input type="text" id="bandnametext" name="bandnametext" required></h2>
+<h3>Set as public?
+    <input id="public" type="checkbox" name="public" onClick="public()">
+</h3>
 <table border="0">
     <tr>
         <td><h3>Currency remaining: </h3></td>
         <td id='remainingGold'>500</td>
+        <td><h3>Member Number: </h3></td>
+        <td id='test'> 1</td>
     </tr>
 </table>
+<h3>Add Currency:
+    <input type="button" value="10" onclick="addMoney(10)">
+    <input type="button" value="30" onclick="addMoney(30)">
+    <input type="button" value="50" onclick="addMoney(50)">
+    <input type="button" value="100" onclick="addMoney(100)">
+    Other amount:<input type="text" id="amount">
+    <input type="button" value="Add" onclick="addMoney(document.getElementById('amount').value)">
+</h3>
+
 <table id="wizardTable">
     <tr>
         <td>Move</td>
@@ -243,15 +441,19 @@
         <td><select id="capspecsel" onchange="setCapSkillchoice(this)">
             <option value="Empty">Select...</option>
             {% for spec in specs %}
-
                 <option value="{{ spec }}">{{ spec }}</option>
             {% endfor %}
         </select></td>
         <td>
-            <select id="capweapsel">
+            <select id="capweapsel1" onchange="setCapWeapen(this,0)">
                 <option value="Empty">Select...</option>
                 {% for weap in weaps %}
-
+                    <option value="{{ weap }}">{{ weap }}</option>
+                {% endfor %}
+            </select>
+            <select id="capweapsel2" onchange="setCapWeapen(this,1)">
+                <option value="Empty">Select...</option>
+                {% for weap in weaps %}
                     <option value="{{ weap }}">{{ weap }}</option>
                 {% endfor %}
             </select>
@@ -260,7 +462,7 @@
     </tr>
 
 </table>
-Hire apprentice? <input type="checkbox" name="appHire" onClick="hireEng()">200gc<br>
+Hire apprentice? <input type="checkbox" id="encheck" name="appHire" onClick="hireEng()">250gc<br>
 <div id="ensignDiv" style='display: none'>
     <table id="ensignTable">
         <tr>
@@ -291,10 +493,9 @@ Hire apprentice? <input type="checkbox" name="appHire" onClick="hireEng()">200gc
                 </select>
             </td>
             <td>
-                <select id="ensweapsel">
+                <select id="ensweapsel" onchange="setEnsWeapon(this)">
                     <option value="Empty">Select...</option>
                     {% for weap in weaps %}
-
                         <option value="{{ weap }}">{{ weap }}</option>
                     {% endfor %}
                 </select>
@@ -316,7 +517,7 @@ Hire apprentice? <input type="checkbox" name="appHire" onClick="hireEng()">200gc
         <td>Cost</td>
         <td>Notes</td>
     </tr>
-    {% for i in range(1,11) %}
+    {% for i in range(1,10) %}
         <tr>
             <td>
                 <select id="troop{{ i }}" onchange="updateTableRow({{ i }}, this)">
@@ -337,8 +538,8 @@ Hire apprentice? <input type="checkbox" name="appHire" onClick="hireEng()">200gc
         </tr>
     {% endfor %}
 </table>
-<input id="creator" type="button" value="Create Warband" onclick="doFormSubmit();"/>
-<input id="clear" type="button" value="Reset" onclick="window.location.href='/new'"/>
+<input id="creator" type="button" value="Create Warband" onclick="doFormSubmit();">
+<input id="clear" type="button" value="Reset" onclick="window.location.href='/new'">
 </body>
 </html>
 

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyAccount</title>
+</head>
+<body>
+<h1>Welcome, {{ name }}!</h1>
+<h3>You have {{ bands|length }} band(s)!</h3>
+</body>
+<table>
+    {% for band in bands %}
+        <tr>
+            <td><a href="/edit/{{ band }}">{{ band }}</a></td>
+            <td><a href="/delete/{{ band }}">Delete</a></td>
+        </tr>
+    {% endfor %}
+</table>
+<table>
+    <tr>
+        <td>
+            <button onclick="window.location.href='/new'">Creat New Band</button>
+        </td>
+        <td>
+            <button onclick="window.location.href='/view'">View Others</button>
+        </td>
+        <td>
+            <button onclick="window.location.href='/logout'">Log Out</button>
+        </td>
+    </tr>
+</table>
+</html>

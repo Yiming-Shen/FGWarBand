@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Login</title>
+    <script>
+        function checkAccount() {
+            var name = document.getElementById('user').value
+            var password = document.getElementById('password').value
+            var flag = 0
+            {% for user,key in accounts.items() %}
+                if (name == "{{user}}") {
+                    flag = 1;
+                    if (password == "{{ key }}") {
+                        flag = 2;
+                    }
+                }
+            {% endfor %}
+            if(flag == 0){
+                document.getElementById('test').innerHTML = "No account found!";
+            }
+            if(flag == 1){
+                document.getElementById('test').innerHTML = "Wrong password!";
+            }
+            if(flag == 2){
+                method = "post";
+                var form = document.createElement("form");
+                form.setAttribute("method", method);
+                var user = document.createElement("input");
+                user.setAttribute("type", "hidden");
+                user.setAttribute("name", "user");
+                user.setAttribute("value", name);
+                form.appendChild(user)
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+ <table >
+     <tr>
+        <td><h3>Account: </h3></td>
+        <td> <input type="text" id = "user" ></td>
+     </tr>
+     <tr>
+         <td><h3>Password: </h3></td>
+        <td> <input type="password" id = "password" ></td>
+     </tr>
+     <tr>
+         <td></td>
+         <td>      <input type="button" value="Log in" onclick="checkAccount()"></td>
+     </tr>
+</table>
+<h3 id="test"></h3>
+<table>
+    <tr>
+         <td>New to FG warband?</td>
+         <td><input type="button" value="Join Now" onclick="window.location.href='/register'"></td>
+     </tr>
+</table>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Others</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            text-align: left;
+        }
+    </style>
+</head>
+<menu type="toolbar">
+      <button type="button" onclick="window.location.href='/myaccount'">Myaccount</button>
+      <button type="button" onclick="window.location.href='/view'">View Others</button>
+      <button type="button" onclick="window.location.href='/logout'">Logout</button>
+</menu>
+<body>
+<h1>Public Bands</h1>
+<table>
+    <tr>
+        <td>Users</td>
+        <td>Bands</td>
+    {% for user,bandlist in bands.items() %}
+            {% for band in bandlist %}
+                <tr>
+                <td>{{ user }}</td>
+                <td><a href="/view/{{ user }}_{{ band }}">{{ band }}</a></td>
+                </tr>
+            {% endfor %}
+    {% endfor %}
+    </tr>
+</table>
+
+</body>
+</html>

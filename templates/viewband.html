@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Others</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<menu type="toolbar">
+      <button type="button" onclick="window.location.href='/myaccount'">Myaccount</button>
+      <button type="button" onclick="window.location.href='/view'">View Others</button>
+      <button type="button" onclick="window.location.href='/logout'">Logout</button>
+</menu>
+<h1>View Public Bands</h1>
+<h2>Warband Owner: {{ user }}<br>
+    Warband Name:{{ band['Name'] }}</h2>
+
+<table border="0">
+    <tr>
+        <td><h3>Currency remaining: </h3></td>
+        <td id='remainingGold'>{{ band['Treasury'] }}</td>
+    </tr>
+</table>
+<table id="wizardTable">
+<h3>Captain:<br></h3>
+    <tr>
+        <td>Move</td>
+        <td>Fight</td>
+        <td>Shoot</td>
+        <td>Shield</td>
+        <td>Morale</td>
+        <td>Health</td>
+        <td>Specialism</td>
+        <td>Weapons and Equipment</td>
+        <td>Skills</td>
+        <td>Experience</td>
+    </tr>
+    <tr>
+
+        <td>{{ band['Captain']['Move'] }}</td>
+        <td>{{ band['Captain']['Fight'] }}</td>
+        <td>{{ band['Captain']['Shoot'] }}</td>
+        <td>{{ band['Captain']['Shield'] }}</td>
+        <td>{{ band['Captain']['Morale'] }}</td>
+        <td>{{ band['Captain']['Health'] }}</td>
+        <td>{{ band['Captain']['Specialism'] }}</td>
+        <td>{% for item in band['Captain']['Items'] %}{{ item }}  {% endfor %}</td>
+        <td>{% for skill in band['Captain']['Skillset'] %}{{ skill }}  {% endfor %}</td>
+        <td>{{ band['Captain']['Experience'] }}</td>
+    </tr>
+
+</table>
+{% if 'Ensign' in band.keys() %}
+    <div id="ensignDiv" style='display: block'>
+
+{% else %}
+    <div id="ensignDiv" style='display: none'>
+{% endif %}
+<table id="ensignTable">
+<h3>Ensign:<br></h3>
+    <tr>
+        <td>Move</td>
+        <td>Fight</td>
+        <td>Shoot</td>
+        <td>Shield</td>
+        <td>Morale</td>
+        <td>Health</td>
+        <td>Specialism</td>
+        <td>Weapons and Equipment</td>
+        <td>Skills</td>
+        <td>Experience</td>
+
+    </tr>
+    {% if 'Ensign' in band.keys() %}
+        <tr>
+            <td>{{ band['Ensign']['Move'] }}</td>
+            <td>{{ band['Ensign']['Fight'] }}</td>
+            <td>{{ band['Ensign']['Shoot'] }}</td>
+            <td>{{ band['Ensign']['Shield'] }}</td>
+            <td>{{ band['Ensign']['Morale'] }}</td>
+            <td>{{ band['Ensign']['Health'] }}</td>
+            <td>{{ band['Ensign']['Specialism'] }}</td>
+            <td>{% for item in band['Ensign']['Items'] %}{{ item }}  {% endfor %}</td>
+            <td>{% for skill in band['Ensign']['Skillset'] %}{{ skill }}  {% endfor %}</td>
+            <td>{{ band['Ensign']['Experience'] }}</td>
+
+        </tr>
+    {% endif %}
+</table>
+</div>
+<table id='rosterTable'>
+<h3>Members:<br></h3>
+    <tr>
+        <td>Class</td>
+        <td>Move</td>
+        <td>Fight</td>
+        <td>Shoot</td>
+        <td>Shield</td>
+        <td>Morale</td>
+        <td>Health</td>
+        <td>Cost</td>
+        <td>Notes</td>
+    </tr>
+
+    {% for trooper in band['Troops'] %}
+        <tr>
+            <td>{{ trooper }}</td>
+            <td>{{ people[trooper]['Move'] }}</td>
+            <td>{{ people[trooper]['Fight'] }}</td>
+            <td>{{ people[trooper]['Shoot'] }}</td>
+            <td>{{ people[trooper]['Shield'] }}</td>
+            <td>{{ people[trooper]['Morale'] }}</td>
+            <td>{{ people[trooper]['Health'] }}</td>
+            <td>{{ people[trooper]['Cost'] }}</td>
+            <td>{{ people[trooper]['Notes'] }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
+
