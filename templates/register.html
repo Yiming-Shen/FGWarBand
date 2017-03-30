@@ -3,6 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <style type="text/css">
+        table, th, td {
+            text-align: right;
+        }
+
+        ul#nav {
+            width: 100%;
+            height: 60px;
+            background: #00A2CA;
+        }
+
+        ul#nav li {
+            display: inline;
+            height: 60px
+        }
+
+        ul#nav li a {
+            display: inline-block;
+            padding: 0 20px;
+            height: 60px;
+            line-height: 60px;
+            color: #FFF;
+            font-family: "\5FAE\8F6F\96C5\9ED1";
+            font-size: 16px
+        }
+
+        #total{
+            margin-left: 40px;
+        }
+
+        ul#nav li a:hover {
+            background: #0095BB
+        }
+
+
+    </style>
     <script>
         var namecheck = false;
         var passwordcheck1 = false;
@@ -71,8 +107,16 @@
     </script>
 </head>
 <body>
+<ul id="nav">
+    <li><a href="/">About</a></li>
+    <li><a href="/myaccount">My Bands</a></li>
+    <li><a href="/view">View Others</a></li>
+    <li><a href="/logout">Log Out</a></li>
+</ul>
+<br/>
+<div id="total">
 <h1>Welcome to FG Warband</h1>
-<p>Please enter your information to complete the registration: </p>
+<h3>Please enter your information to complete the registration: </h3>
 <table>
     <tr>
         <td><h3>Account: </h3></td>
@@ -94,7 +138,7 @@
         <td><input type="button" value="Register" onclick="checkRegister()"></td>
     </tr>
 </table>
-<h1></h1>
-Already have an account? <input type="button" value="Login" onclick="window.location.href='/login'">
+<h3>Already have an account? <input type="button" value="Login" onclick="window.location.href='/login'"></h3>
+</div>
 </body>
 </html>

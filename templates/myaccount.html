@@ -3,8 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>MyAccount</title>
+    <style type="text/css">
+        table, th {
+            text-align: center;
+        }
+
+        td {
+            border: 1px solid black;
+            text-align: center;
+            width: 70px;
+        }
+
+        ul#nav {
+            width: 100%;
+            height: 60px;
+            background: #00A2CA;
+        }
+
+        ul#nav li {
+            display: inline;
+            height: 60px
+        }
+
+        ul#nav li a {
+            display: inline-block;
+            padding: 0 20px;
+            height: 60px;
+            line-height: 60px;
+            color: #FFF;
+            font-family: "\5FAE\8F6F\96C5\9ED1";
+            font-size: 16px
+        }
+
+        ul#nav li a:hover {
+            background: #0095BB
+        }
+
+        #total{
+            margin-left: 40px;
+        }
+
+    </style>
 </head>
 <body>
+<ul id="nav">
+        <li><a href="/">About</a></li>
+        <li><a href="/myaccount">My Bands</a></li>
+        <li><a href="/view">View Others</a></li>
+        <li><a href="/logout">Log Out</a></li>
+    </ul>
+<div id="total">
 <h1>Welcome, {{ name }}!</h1>
 <h3>You have {{ bands|length }} band(s)!</h3>
 </body>
@@ -16,17 +64,8 @@
         </tr>
     {% endfor %}
 </table>
-<table>
-    <tr>
-        <td>
+<br>
+<br>
             <button onclick="window.location.href='/new'">Creat New Band</button>
-        </td>
-        <td>
-            <button onclick="window.location.href='/view'">View Others</button>
-        </td>
-        <td>
-            <button onclick="window.location.href='/logout'">Log Out</button>
-        </td>
-    </tr>
-</table>
+</div>
 </html>

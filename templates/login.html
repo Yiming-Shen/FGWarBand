@@ -4,6 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <title>User Login</title>
+    <style type="text/css">
+        table, th, td {
+            text-align: right;
+        }
+
+        ul#nav {
+            width: 100%;
+            height: 60px;
+            background: #00A2CA;
+        }
+
+        ul#nav li {
+            display: inline;
+            height: 60px
+        }
+
+        ul#nav li a {
+            display: inline-block;
+            padding: 0 20px;
+            height: 60px;
+            line-height: 60px;
+            color: #FFF;
+            font-family: "\5FAE\8F6F\96C5\9ED1";
+            font-size: 16px
+        }
+
+        ul#nav li a:hover {
+            background: #0095BB
+        }
+        #total{
+            margin-left: 40px;
+        }
+
+    </style>
     <script>
         function checkAccount() {
             var name = document.getElementById('user').value
@@ -17,13 +51,13 @@
                     }
                 }
             {% endfor %}
-            if(flag == 0){
+            if (flag == 0) {
                 document.getElementById('test').innerHTML = "No account found!";
             }
-            if(flag == 1){
+            if (flag == 1) {
                 document.getElementById('test').innerHTML = "Wrong password!";
             }
-            if(flag == 2){
+            if (flag == 2) {
                 method = "post";
                 var form = document.createElement("form");
                 form.setAttribute("method", method);
@@ -41,27 +75,37 @@
 
 <body>
 
- <table >
-     <tr>
+<ul id="nav">
+    <li><a href="/">About</a></li>
+    <li><a href="/myaccount">My Bands</a></li>
+    <li><a href="/view">View Others</a></li>
+    <li><a href="/logout">Log Out</a></li>
+</ul>
+<br/>
+<div id="total">
+<h1>Welcome back, please login.</h1><br>
+<table>
+    <tr>
         <td><h3>Account: </h3></td>
-        <td> <input type="text" id = "user" ></td>
-     </tr>
-     <tr>
-         <td><h3>Password: </h3></td>
-        <td> <input type="password" id = "password" ></td>
-     </tr>
-     <tr>
-         <td></td>
-         <td>      <input type="button" value="Log in" onclick="checkAccount()"></td>
-     </tr>
+        <td><input type="text" id="user"></td>
+    </tr>
+    <tr>
+        <td><h3>Password: </h3></td>
+        <td><input type="password" id="password"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="button" value="Log in" onclick="checkAccount()"></td>
+    </tr>
 </table>
 <h3 id="test"></h3>
 <table>
     <tr>
-         <td>New to FG warband?</td>
-         <td><input type="button" value="Join Now" onclick="window.location.href='/register'"></td>
-     </tr>
+        <td><h3>New to FG warband?</h3></td>
+        <td><input type="button" value="Join Now" onclick="window.location.href='/register'"></td>
+    </tr>
 </table>
+    </div>
 </body>
 
 </html>

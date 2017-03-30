@@ -2,7 +2,35 @@
 <html>
 <head>
     <title>View Others</title>
-    <style>
+    <style type="text/css">
+
+        ul#nav {
+            width: 100%;
+            height: 60px;
+            background: #00A2CA;
+        }
+
+        ul#nav li {
+            display: inline;
+            height: 60px
+        }
+
+        ul#nav li a {
+            display: inline-block;
+            padding: 0 20px;
+            height: 60px;
+            line-height: 60px;
+            color: #FFF;
+            font-family: "\5FAE\8F6F\96C5\9ED1";
+            font-size: 16px
+        }
+
+        ul#nav li a:hover {
+            background: #0095BB
+        }
+        #total{
+            margin-left: 40px;
+        }
         table, th, td {
             border: 1px solid black;
             text-align: left;
@@ -10,11 +38,13 @@
     </style>
 </head>
 <body>
-<menu type="toolbar">
-      <button type="button" onclick="window.location.href='/myaccount'">Myaccount</button>
-      <button type="button" onclick="window.location.href='/view'">View Others</button>
-      <button type="button" onclick="window.location.href='/logout'">Logout</button>
-</menu>
+<ul id="nav">
+    <li><a href="/">About</a></li>
+    <li><a href="/myaccount">My Bands</a></li>
+    <li><a href="/view">View Others</a></li>
+    <li><a href="/logout">Log Out</a></li>
+</ul>
+<div id="total">
 <h1>View Public Bands</h1>
 <h2>Warband Owner: {{ user }}<br>
     Warband Name:{{ band['Name'] }}</h2>
@@ -48,8 +78,8 @@
         <td>{{ band['Captain']['Morale'] }}</td>
         <td>{{ band['Captain']['Health'] }}</td>
         <td>{{ band['Captain']['Specialism'] }}</td>
-        <td>{% for item in band['Captain']['Items'] %}{{ item }}  {% endfor %}</td>
-        <td>{% for skill in band['Captain']['Skillset'] %}{{ skill }}  {% endfor %}</td>
+        <td>{% for item in band['Captain']['Items'] %}{% if item != "Empty" %}{{ item }} {% endif %} {% endfor %}</td>
+        <td>{% for skill in band['Captain']['Skillset'] %} {{ skill }}  {% endfor %}</td>
         <td>{{ band['Captain']['Experience'] }}</td>
     </tr>
 
@@ -84,7 +114,7 @@
             <td>{{ band['Ensign']['Morale'] }}</td>
             <td>{{ band['Ensign']['Health'] }}</td>
             <td>{{ band['Ensign']['Specialism'] }}</td>
-            <td>{% for item in band['Ensign']['Items'] %}{{ item }}  {% endfor %}</td>
+            <td>{% for item in band['Ensign']['Items'] %}{% if item != "Empty" %}{{ item }} {% endif %} {% endfor %}</td>
             <td>{% for skill in band['Ensign']['Skillset'] %}{{ skill }}  {% endfor %}</td>
             <td>{{ band['Ensign']['Experience'] }}</td>
 
@@ -120,6 +150,7 @@
         </tr>
     {% endfor %}
 </table>
+</div>
 </body>
 </html>
 

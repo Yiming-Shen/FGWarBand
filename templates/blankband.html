@@ -2,7 +2,37 @@
 <html>
 <head>
     <title>New Band</title>
-    <style>
+    <style type="text/css">
+
+        ul#nav {
+            width: 100%;
+            height: 60px;
+            background: #00A2CA;
+        }
+
+        ul#nav li {
+            display: inline;
+            height: 60px
+        }
+
+        ul#nav li a {
+            display: inline-block;
+            padding: 0 20px;
+            height: 60px;
+            line-height: 60px;
+            color: #FFF;
+            font-family: "\5FAE\8F6F\96C5\9ED1";
+            font-size: 16px
+        }
+
+        ul#nav li a:hover {
+            background: #0095BB
+        }
+
+        #total{
+            margin-left: 40px;
+        }
+
         table, th, td {
             border: 1px solid black;
             text-align: left;
@@ -351,34 +381,46 @@
             document.body.appendChild(form);
             var nameused = false;
             {% for usedname in userbands %}
-                if (bandname.value == "{{ usedname }}"){nameused = true;}
+                if (bandname.value == "{{ usedname }}") {
+                    nameused = true;
+                }
             {% endfor %}
-            if (document.getElementById("encheck").checked){
-                if (bandname.value == ""){
-                    notices.innerHTML="Band name must be specified.";
-                }else {
-                    if(nameused){notices.innerHTML="Band name used.";}
-                    else{if(capspec.value == "Empty"){
-                        notices.innerHTML="Captain specialism must be specifeid.";
+            if (document.getElementById("encheck").checked) {
+                if (bandname.value == "") {
+                    notices.innerHTML = "Band name must be specified.";
+                } else {
+                    if (nameused) {
+                        notices.innerHTML = "Band name used.";
                     }
-                    else{
-                        if(ensspec.value == "Empty"){
-                            notices.innerHTML="Ensign specialism must be specifeid.";
+                    else {
+                        if (capspec.value == "Empty") {
+                            notices.innerHTML = "Captain specialism must be specifeid.";
                         }
-                        else {form.submit();}
-                    }}
+                        else {
+                            if (ensspec.value == "Empty") {
+                                notices.innerHTML = "Ensign specialism must be specifeid.";
+                            }
+                            else {
+                                form.submit();
+                            }
+                        }
+                    }
 
                 }
-            }else{
-                if (bandname.value == ""){
-                    notices.innerHTML="Band name must be specified.";
-                }else{
-                    if(nameused){notices.innerHTML="Band name used.";}
-                    else{
-                        if(capspec.value == "Empty"){
-                        notices.innerHTML="Captain specialism must be specifeid.";
+            } else {
+                if (bandname.value == "") {
+                    notices.innerHTML = "Band name must be specified.";
+                } else {
+                    if (nameused) {
+                        notices.innerHTML = "Band name used.";
                     }
-                    else {form.submit();}
+                    else {
+                        if (capspec.value == "Empty") {
+                            notices.innerHTML = "Captain specialism must be specifeid.";
+                        }
+                        else {
+                            form.submit();
+                        }
                     }
 
                 }
@@ -389,13 +431,16 @@
     </script>
 </head>
 <body>
-<menu type="toolbar">
-    <button type="button" onclick="window.location.href='/myaccount'">Myaccount</button>
-    <button type="button" onclick="window.location.href='/view'">View Others</button>
-    <button type="button" onclick="window.location.href='/logout'">Logout</button>
-    <h3 id="notices"></h3>
-</menu>
+
+    <ul id="nav">
+        <li><a href="/">About</a></li>
+        <li><a href="/myaccount">My Bands</a></li>
+        <li><a href="/view">View Others</a></li>
+        <li><a href="/logout">Log Out</a></li>
+    </ul>
+<div id="total">
 <h1>Creating new band!</h1>
+
 <h2>Warband Name:<input type="text" id="bandnametext" name="bandnametext" required></h2>
 <h3>Set as public?
     <input id="public" type="checkbox" name="public" onClick="public()">
@@ -408,15 +453,16 @@
         <td id='test'> 1</td>
     </tr>
 </table>
-<h3>Add Currency:
-    <input type="button" value="10" onclick="addMoney(10)">
-    <input type="button" value="30" onclick="addMoney(30)">
-    <input type="button" value="50" onclick="addMoney(50)">
-    <input type="button" value="100" onclick="addMoney(100)">
-    Other amount:<input type="text" id="amount">
-    <input type="button" value="Add" onclick="addMoney(document.getElementById('amount').value)">
-</h3>
-
+{#<h3>Add Currency:#}
+{#    <input type="button" value="10" onclick="addMoney(10)">#}
+{#    <input type="button" value="30" onclick="addMoney(30)">#}
+{#    <input type="button" value="50" onclick="addMoney(50)">#}
+{#    <input type="button" value="100" onclick="addMoney(100)">#}
+{#    Other amount:<input type="text" id="amount">#}
+{#    <input type="button" value="Add" onclick="addMoney(document.getElementById('amount').value)">#}
+{#</h3>#}
+<h3 id="notices" style="color: crimson"></h3>
+<h3>Captain</h3>
 <table id="wizardTable">
     <tr>
         <td>Move</td>
@@ -462,8 +508,9 @@
     </tr>
 
 </table>
-Hire apprentice? <input type="checkbox" id="encheck" name="appHire" onClick="hireEng()">250gc<br>
+    <h3>Hire apprentice? <input type="checkbox" id="encheck" name="appHire" onClick="hireEng()">250gc</h3>
 <div id="ensignDiv" style='display: none'>
+    <h3>Ensign</h3>
     <table id="ensignTable">
         <tr>
             <td>Move</td>
@@ -505,6 +552,7 @@ Hire apprentice? <input type="checkbox" id="encheck" name="appHire" onClick="hir
 
     </table>
 </div>
+<br><br>
 <table id='rosterTable'>
     <tr>
         <td>Class</td>
@@ -540,6 +588,7 @@ Hire apprentice? <input type="checkbox" id="encheck" name="appHire" onClick="hir
 </table>
 <input id="creator" type="button" value="Create Warband" onclick="doFormSubmit();">
 <input id="clear" type="button" value="Reset" onclick="window.location.href='/new'">
+</div>
 </body>
 </html>
 
