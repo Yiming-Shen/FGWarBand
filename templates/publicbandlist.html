@@ -8,6 +8,7 @@
             border: 1px solid black;
             text-align: left;
         }
+
         ul#nav {
             width: 100%;
             height: 60px;
@@ -33,35 +34,37 @@
             background: #0095BB
         }
 
-        #total{
+        #total {
             margin-left: 40px;
         }
 
     </style>
 </head>
 <ul id="nav">
-    <li><a href="/">About</a></li>
     <li><a href="/myaccount">My Bands</a></li>
+    <li><a href="/new">Create New Band</a></li>
     <li><a href="/view">View Others</a></li>
     <li><a href="/logout">Log Out</a></li>
 </ul>
 <body>
 <div id="total">
-<h1>Public Bands</h1>
-<table>
-    <tr>
-        <td>Users</td>
-        <td>Bands</td>
-    {% for user,bandlist in bands.items() %}
-            {% for band in bandlist %}
-                <tr>
-                <td>{{ user }}</td>
-                <td><a href="/view/{{ user }}_{{ band }}">{{ band }}</a></td>
-                </tr>
+    <h1>Public Bands</h1>
+    <table>
+        <tr>
+            <td><h2>Users</h2></td>
+            <td><h2>Bands</h2></td>
+            <td><h2>View</h2></td>
+            {% for user,bandlist in bands.items() %}
+                {% for band in bandlist %}
+                    <tr>
+                        <td><h3>{{ user }}</h3></td>
+                        <td><h3>{{ band }}</h3></td>
+                        <td><a href="/view/{{ user }}_{{ band }}"><h3>View</h3></a></td>
+                    </tr>
+                {% endfor %}
             {% endfor %}
-    {% endfor %}
-    </tr>
-</table>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

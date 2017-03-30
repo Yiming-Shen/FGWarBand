@@ -39,19 +39,19 @@
 </head>
 <body>
 <ul id="nav">
-    <li><a href="/">About</a></li>
     <li><a href="/myaccount">My Bands</a></li>
+    <li><a href="/new">Create New Band</a></li>
     <li><a href="/view">View Others</a></li>
     <li><a href="/logout">Log Out</a></li>
 </ul>
 <div id="total">
 <h1>View Public Bands</h1>
-<h2>Warband Owner: {{ user }}<br>
-    Warband Name:{{ band['Name'] }}</h2>
+<h2>Warband Owner: <i>{{ user }}</i><br>
+    Warband Name: <i>{{ band['Name'] }}</i></h2>
 
 <table border="0">
     <tr>
-        <td><h3>Currency remaining: </h3></td>
+        <td><h3>Currency: </h3></td>
         <td id='remainingGold'>{{ band['Treasury'] }}</td>
     </tr>
 </table>
@@ -150,6 +150,8 @@
         </tr>
     {% endfor %}
 </table>
+<br>
+<button onclick="window.location.href='/view'"><h3>Return Public Bands List</h3></button>
 </div>
 </body>
 </html>

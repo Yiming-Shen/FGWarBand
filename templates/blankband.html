@@ -29,7 +29,7 @@
             background: #0095BB
         }
 
-        #total{
+        #total {
             margin-left: 40px;
         }
 
@@ -432,86 +432,29 @@
 </head>
 <body>
 
-    <ul id="nav">
-        <li><a href="/">About</a></li>
-        <li><a href="/myaccount">My Bands</a></li>
-        <li><a href="/view">View Others</a></li>
-        <li><a href="/logout">Log Out</a></li>
-    </ul>
+<ul id="nav">
+    <li><a href="/myaccount">My Bands</a></li>
+    <li><a href="/new">Create New Band</a></li>
+    <li><a href="/view">View Others</a></li>
+    <li><a href="/logout">Log Out</a></li>
+</ul>
 <div id="total">
-<h1>Creating new band!</h1>
-
-<h2>Warband Name:<input type="text" id="bandnametext" name="bandnametext" required></h2>
-<h3>Set as public?
-    <input id="public" type="checkbox" name="public" onClick="public()">
-</h3>
-<table border="0">
-    <tr>
-        <td><h3>Currency remaining: </h3></td>
-        <td id='remainingGold'>500</td>
-        <td><h3>Member Number: </h3></td>
-        <td id='test'> 1</td>
-    </tr>
-</table>
-{#<h3>Add Currency:#}
-{#    <input type="button" value="10" onclick="addMoney(10)">#}
-{#    <input type="button" value="30" onclick="addMoney(30)">#}
-{#    <input type="button" value="50" onclick="addMoney(50)">#}
-{#    <input type="button" value="100" onclick="addMoney(100)">#}
-{#    Other amount:<input type="text" id="amount">#}
-{#    <input type="button" value="Add" onclick="addMoney(document.getElementById('amount').value)">#}
-{#</h3>#}
-<h3 id="notices" style="color: crimson"></h3>
-<h3>Captain</h3>
-<table id="wizardTable">
-    <tr>
-        <td>Move</td>
-        <td>Fight</td>
-        <td>Shoot</td>
-        <td>Shield</td>
-        <td>Morale</td>
-        <td>Health</td>
-        <td>Specialism</td>
-        <td>Weapons and Equipment</td>
-        <td>Skills</td>
-    </tr>
-    <tr>
-
-        <td>{{ wizard['Captain']['Move'] }}</td>
-        <td>{{ wizard['Captain']['Fight'] }}</td>
-        <td>{{ wizard['Captain']['Shoot'] }}</td>
-        <td>{{ wizard['Captain']['Shield'] }}</td>
-        <td>{{ wizard['Captain']['Morale'] }}</td>
-        <td>{{ wizard['Captain']['Health'] }}</td>
-
-        <td><select id="capspecsel" onchange="setCapSkillchoice(this)">
-            <option value="Empty">Select...</option>
-            {% for spec in specs %}
-                <option value="{{ spec }}">{{ spec }}</option>
-            {% endfor %}
-        </select></td>
-        <td>
-            <select id="capweapsel1" onchange="setCapWeapen(this,0)">
-                <option value="Empty">Select...</option>
-                {% for weap in weaps %}
-                    <option value="{{ weap }}">{{ weap }}</option>
-                {% endfor %}
-            </select>
-            <select id="capweapsel2" onchange="setCapWeapen(this,1)">
-                <option value="Empty">Select...</option>
-                {% for weap in weaps %}
-                    <option value="{{ weap }}">{{ weap }}</option>
-                {% endfor %}
-            </select>
-        </td>
-        <td></td>
-    </tr>
-
-</table>
-    <h3>Hire apprentice? <input type="checkbox" id="encheck" name="appHire" onClick="hireEng()">250gc</h3>
-<div id="ensignDiv" style='display: none'>
-    <h3>Ensign</h3>
-    <table id="ensignTable">
+    <h1>Creating new band!</h1>
+    <h3 id="notices" style="color: crimson"></h3>
+    <h2>Warband Name:<input type="text" id="bandnametext" name="bandnametext" required></h2>
+    <h3>Set as public?
+        <input id="public" type="checkbox" name="public" onClick="public()">
+    </h3>
+    <table border="0">
+        <tr>
+            <td><h3>Currency remaining: </h3></td>
+            <td id='remainingGold'>500</td>
+            <td><h3>Member Number: </h3></td>
+            <td id='test'> 1</td>
+        </tr>
+    </table>
+    <h3>Captain</h3>
+    <table id="wizardTable">
         <tr>
             <td>Move</td>
             <td>Fight</td>
@@ -524,23 +467,28 @@
             <td>Skills</td>
         </tr>
         <tr>
-            <td>{{ apprentice['Ensign']['Move'] }}</td>
-            <td>{{ apprentice['Ensign']['Fight'] }}</td>
-            <td>{{ apprentice['Ensign']['Shoot'] }}</td>
-            <td>{{ apprentice['Ensign']['Shield'] }}</td>
-            <td>{{ apprentice['Ensign']['Morale'] }}</td>
-            <td>{{ apprentice['Ensign']['Health'] }}</td>
-            <td>
-                <select id="ensskillsel" onchange="setEnsSkillchoice(this)">
-                    <option value="Empty">Select...</option>
-                    {% for spec in specs %}
 
-                        <option value="{{ spec }}">{{ spec }}</option>
+            <td>{{ wizard['Captain']['Move'] }}</td>
+            <td>{{ wizard['Captain']['Fight'] }}</td>
+            <td>{{ wizard['Captain']['Shoot'] }}</td>
+            <td>{{ wizard['Captain']['Shield'] }}</td>
+            <td>{{ wizard['Captain']['Morale'] }}</td>
+            <td>{{ wizard['Captain']['Health'] }}</td>
+
+            <td><select id="capspecsel" onchange="setCapSkillchoice(this)">
+                <option value="Empty">Select...</option>
+                {% for spec in specs %}
+                    <option value="{{ spec }}">{{ spec }}</option>
+                {% endfor %}
+            </select></td>
+            <td>
+                <select id="capweapsel1" onchange="setCapWeapen(this,0)">
+                    <option value="Empty">Select...</option>
+                    {% for weap in weaps %}
+                        <option value="{{ weap }}">{{ weap }}</option>
                     {% endfor %}
                 </select>
-            </td>
-            <td>
-                <select id="ensweapsel" onchange="setEnsWeapon(this)">
+                <select id="capweapsel2" onchange="setCapWeapen(this,1)">
                     <option value="Empty">Select...</option>
                     {% for weap in weaps %}
                         <option value="{{ weap }}">{{ weap }}</option>
@@ -551,43 +499,85 @@
         </tr>
 
     </table>
-</div>
-<br><br>
-<table id='rosterTable'>
-    <tr>
-        <td>Class</td>
-        <td>Move</td>
-        <td>Fight</td>
-        <td>Shoot</td>
-        <td>Shield</td>
-        <td>Morale</td>
-        <td>Health</td>
-        <td>Cost</td>
-        <td>Notes</td>
-    </tr>
-    {% for i in range(1,10) %}
+    <h3>Hire apprentice? <input type="checkbox" id="encheck" name="appHire" onClick="hireEng()">250gc</h3>
+    <div id="ensignDiv" style='display: none'>
+        <table id="ensignTable">
+            <tr>
+                <td>Move</td>
+                <td>Fight</td>
+                <td>Shoot</td>
+                <td>Shield</td>
+                <td>Morale</td>
+                <td>Health</td>
+                <td>Specialism</td>
+                <td>Weapons and Equipment</td>
+                <td>Skills</td>
+            </tr>
+            <tr>
+                <td>{{ apprentice['Ensign']['Move'] }}</td>
+                <td>{{ apprentice['Ensign']['Fight'] }}</td>
+                <td>{{ apprentice['Ensign']['Shoot'] }}</td>
+                <td>{{ apprentice['Ensign']['Shield'] }}</td>
+                <td>{{ apprentice['Ensign']['Morale'] }}</td>
+                <td>{{ apprentice['Ensign']['Health'] }}</td>
+                <td>
+                    <select id="ensskillsel" onchange="setEnsSkillchoice(this)">
+                        <option value="Empty">Select...</option>
+                        {% for spec in specs %}
+
+                            <option value="{{ spec }}">{{ spec }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select id="ensweapsel" onchange="setEnsWeapon(this)">
+                        <option value="Empty">Select...</option>
+                        {% for weap in weaps %}
+                            <option value="{{ weap }}">{{ weap }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <br>
+    </div>
+    <table id='rosterTable'>
         <tr>
-            <td>
-                <select id="troop{{ i }}" onchange="updateTableRow({{ i }}, this)">
-                    <option value="Empty">Empty</option>
-                    {% for troop in people.keys() %}
-                        <option value="{{ troop }}">{{ troop }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>0</td>
-            <td>-</td>
+            <td>Class</td>
+            <td>Move</td>
+            <td>Fight</td>
+            <td>Shoot</td>
+            <td>Shield</td>
+            <td>Morale</td>
+            <td>Health</td>
+            <td>Cost</td>
+            <td>Notes</td>
         </tr>
-    {% endfor %}
-</table>
-<input id="creator" type="button" value="Create Warband" onclick="doFormSubmit();">
-<input id="clear" type="button" value="Reset" onclick="window.location.href='/new'">
+        {% for i in range(1,10) %}
+            <tr>
+                <td>
+                    <select id="troop{{ i }}" onchange="updateTableRow({{ i }}, this)">
+                        <option value="Empty">Empty</option>
+                        {% for troop in people.keys() %}
+                            <option value="{{ troop }}">{{ troop }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>0</td>
+                <td>-</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <button onclick="window.location.href='/new'"><h2>Reset</h2></button>
+    <button id="creator" onclick="doFormSubmit()"><h2>Create Warband</h2></button>
 </div>
 </body>
 </html>

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>MyAccount</title>
     <style type="text/css">
-        table, th {
-            text-align: center;
+        table, th, td {
+            border: 1px solid black;
+            text-align: left;
         }
 
         td {
@@ -39,7 +40,7 @@
             background: #0095BB
         }
 
-        #total{
+        #total {
             margin-left: 40px;
         }
 
@@ -47,25 +48,24 @@
 </head>
 <body>
 <ul id="nav">
-        <li><a href="/">About</a></li>
-        <li><a href="/myaccount">My Bands</a></li>
-        <li><a href="/view">View Others</a></li>
-        <li><a href="/logout">Log Out</a></li>
-    </ul>
+    <li><a href="/myaccount">My Bands</a></li>
+    <li><a href="/new">Create New Band</a></li>
+    <li><a href="/view">View Others</a></li>
+    <li><a href="/logout">Log Out</a></li>
+</ul>
 <div id="total">
-<h1>Welcome, {{ name }}!</h1>
-<h3>You have {{ bands|length }} band(s)!</h3>
-</body>
-<table>
-    {% for band in bands %}
-        <tr>
-            <td><a href="/edit/{{ band }}">{{ band }}</a></td>
-            <td><a href="/delete/{{ band }}">Delete</a></td>
-        </tr>
-    {% endfor %}
-</table>
-<br>
-<br>
-            <button onclick="window.location.href='/new'">Creat New Band</button>
+    <h1>Welcome, <i>{{ name }}</i> !</h1>
+    <h3>You have <i>{{ bands|length }}</i> band(s)!</h3>
+
+    <table>
+        {% for band in bands %}
+            <tr>
+                <td><h3>{{ band }}</h3></td>
+                <td><a href="/edit_{{ band }}">Edit</a></td>
+                <td><a href="/delete_{{ band }}">Delete</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 </div>
+</body>
 </html>

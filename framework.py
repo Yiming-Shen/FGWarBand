@@ -34,9 +34,6 @@ app.skillsets = {'Engineering': ['Repair', 'Sabotage', 'Augment'], 'Psychology':
 app.weapon = ['Blaster', 'Needle Gun', 'Blade', 'Cannon', 'Whip']
 app.cost = {'Blaster': 5, 'Needle Gun': 12, 'Blade': 3, 'Cannon': 15, 'Whip': 5}
 app.accounts = {'a': 'a', 'b': 'b', 'c': 'c'}
-# users = pickle.load(
-#         open(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "users"), "users"), "rb"))
-
 app.loggeduser = ""
 
 
@@ -54,7 +51,7 @@ def checkUsers():
     return users
 
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def welcome_page():
     return app.send_static_file('index.html'), httpcodes.OK
 
@@ -97,7 +94,7 @@ def logout():
         return redirect(url_for("login_page"))
 
 
-@app.route('/myaccount', methods=['GET', 'POST'])
+@app.route('/myaccount', methods=['GET'])
 def myaccount_page():
     if app.loggeduser == "":
         return redirect(url_for("login_page"))
@@ -105,64 +102,6 @@ def myaccount_page():
         bands = os.listdir(
             os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"), app.loggeduser))
         return render_template('myaccount.html', name=app.loggeduser, bands=bands), httpcodes.OK
-
-
-def sumband(createdband):
-    total = 0;
-    for item in createdband['Captain']['Items']:
-        total = total + app.cost[item]
-    if 'Ensign' in createdband.keys():
-        total = total + 250
-        for item in createdband['Captain']['Items']:
-            total = total + app.cost[item]
-    for troop in createdband['Troops']:
-        total = total + app.troops[troop]['Cost']
-    return total
-
-
-def validate_band(createdband):
-    ''' Need to write the validation '''
-    return True
-
-
-def validate_band(oldband, newband):
-    return True
-
-
-@app.route('/view', methods=['GET'])
-def view():
-    if app.loggeduser == "":
-        return redirect(url_for("login_page"))
-    else:
-        bands = {}
-        bandir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands")
-        userfolders = os.listdir(bandir)
-        for username in userfolders:
-            if username != app.loggeduser:
-                if username != ".DS_Store":
-                    userpath = os.path.join(bandir, username)
-                    userbands = os.listdir(userpath)
-                    bands[username] = []
-                    for band in userbands:
-                        loadedband = pickle.load(open(os.path.join(userpath, band), "rb"))
-                        if loadedband['Public'] == "public":
-                            bands[username].append(band)
-        return render_template('publicbandlist.html', bands=bands)
-
-
-@app.route('/view/<user>_<band>', methods=['GET'])
-def view_band(user, band):
-    loadedband = pickle.load(
-        open(os.path.join(
-            os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"), user), band),
-            "rb"))
-    if request.method == 'GET':
-        if app.loggeduser == "":
-            return redirect(url_for("login_page"))
-        else:
-            return render_template('viewband.html', user=user, band=loadedband, people=app.troops, wizard=app.wizard,
-                                   apprentice=app.apprentice, specs=app.specialisms, skills=app.skillsets,
-                                   weaps=app.weapon), httpcodes.OK
 
 
 @app.route('/new', methods=['GET', 'POST'])
@@ -214,25 +153,7 @@ def new_warband():
         return redirect(url_for("myaccount_page"))
 
 
-@app.route('/edit', methods=['GET'])
-def edit_warband():
-    # users = pickle.load(
-    #     open(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "users"), "users"), "rb"))
-    users = checkUsers()
-    if os.path.isdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands")):
-        bands = os.listdir(
-            os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"), app.loggeduser))
-    else:
-        os.mkdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"))
-        bands = None
-    if request.method == 'GET':
-        if app.loggeduser == "":
-            return redirect(url_for("login_page"))
-        else:
-            return redirect(url_for("myaccount_page"))
-
-
-@app.route('/edit/<band>', methods=['GET', 'POST'])
+@app.route('/edit_<band>', methods=['GET', 'POST'])
 def edit_given_warband(band):
     loadedband = pickle.load(
         open(os.path.join(
@@ -246,10 +167,8 @@ def edit_given_warband(band):
                                    apprentice=app.apprentice, specs=app.specialisms, skills=app.skillsets,
                                    weaps=app.weapon, weapcost=app.cost), httpcodes.OK
     if request.method == 'POST':
-
         bandname = request.form['bandname']
         capspec = request.form['capspec']
-        # capskill = request.form['capskill']
         skills = json.loads(request.form['capskill'])
         capweap1 = request.form['capweap1']
         capweap2 = request.form['capweap2']
@@ -289,8 +208,6 @@ def edit_given_warband(band):
                 createdband['Ensign']['Skillset'] = []
                 createdband['Ensign']['Skillset'].append(eskills)
             ensspec = request.form['ensspec']
-            # ensskill = request.form['ensskill']
-            # eskills = request.form['ensskill']
             ensmov = request.form['ensmove']
             ensfig = request.form['ensfight']
             enssho = request.form['ensshoot']
@@ -300,7 +217,6 @@ def edit_given_warband(band):
             ensexp = request.form['ensexperience']
             ensweap = request.form['ensweap']
             createdband['Ensign']['Specialism'] = ensspec
-            # createdband['Ensign']['Skillset'].extend(eskills)
             createdband['Ensign']['Items'] = []
             createdband['Ensign']['Items'] += [ensweap]
             createdband['Ensign']['Move'] = ensmov
@@ -311,7 +227,6 @@ def edit_given_warband(band):
             createdband['Ensign']['Health'] = enshea
             createdband['Ensign']['Experience'] = ensexp
         createdband['Troops'] = []
-
         for item in troops:
             if item != "Empty":
                 createdband['Troops'].append(item)
@@ -319,36 +234,49 @@ def edit_given_warband(band):
             os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"),
                          app.loggeduser), bandname), "wb"))
         return redirect(url_for("myaccount_page"))
-        # if len(createdband['Troops']) > 9:
-        #     return render_template('blankband.html', people=app.troops, wizard=app.wizard, apprentice=app.apprentice,
-        #                            specs=app.specialisms, skills=app.skillsets, weaps=app.weapon, weapcost=app.cost), httpcodes.OK
-        # if validate_band(loadedband, createdband):
-        #     # createdband['Treasury'] = 500 - sumband(createdband)
-        #     pickle.dump(createdband,
-        #                 open(os.path.join(
-        #                     os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"),
-        #                                  app.loggeduser), bandname),
-        #                      "wb"))
-        #     return render_template('editband.html', band=createdband, people=app.troops, wizard=app.wizard,
-        #                            apprentice=app.apprentice, specs=app.specialisms, skills=app.skillsets,
-        #                            weaps=app.weapon, weapcost=app.cost), httpcodes.OK
-        # else:
-        #     return render_template('editband.html', band=loadedband, people=app.troops, wizard=app.wizard,
-        #                            apprentice=app.apprentice, specs=app.specialisms, skills=app.skillsets,
-        #                            weaps=app.weapon, weapcost=app.cost), httpcodes.BAD_REQUEST
 
 
-@app.route('/delete/<band>', methods=['GET'])
+@app.route('/view', methods=['GET'])
+def view():
+    if app.loggeduser == "":
+        return redirect(url_for("login_page"))
+    else:
+        bands = {}
+        bandir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands")
+        userfolders = os.listdir(bandir)
+        for username in userfolders:
+            if username != app.loggeduser:
+                if username != ".DS_Store":
+                    userpath = os.path.join(bandir, username)
+                    userbands = os.listdir(userpath)
+                    bands[username] = []
+                    for band in userbands:
+                        loadedband = pickle.load(open(os.path.join(userpath, band), "rb"))
+                        if loadedband['Public'] == "public":
+                            bands[username].append(band)
+        return render_template('publicbandlist.html', bands=bands)
+
+
+@app.route('/view/<user>_<band>', methods=['GET'])
+def view_band(user, band):
+    loadedband = pickle.load(
+        open(os.path.join(
+            os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"), user), band),
+            "rb"))
+    if request.method == 'GET':
+        if app.loggeduser == "":
+            return redirect(url_for("login_page"))
+        else:
+            return render_template('viewband.html', user=user, band=loadedband, people=app.troops, wizard=app.wizard,
+                                   apprentice=app.apprentice, specs=app.specialisms, skills=app.skillsets,
+                                   weaps=app.weapon), httpcodes.OK
+
+
+@app.route('/delete_<band>', methods=['GET'])
 def delete_given_warband(band):
     os.remove(
         os.path.join(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"), app.loggeduser),
                      band))
-    if os.path.isdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands")):
-        bands = os.listdir(
-            (os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"), app.loggeduser)))
-    else:
-        os.mkdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"))
-        bands = None
     if request.method == 'GET':
         if app.loggeduser == "":
             return redirect(url_for("login_page"))
