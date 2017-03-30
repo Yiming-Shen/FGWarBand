@@ -233,7 +233,7 @@ def edit_warband():
         if app.loggeduser == "":
             return redirect(url_for("login_page"))
         else:
-            return render_template('bandlist.html', bands=bands), httpcodes.OK
+            return redirect(url_for("myaccount_page"))
 
 
 @app.route('/edit/<band>', methods=['GET', 'POST'])
