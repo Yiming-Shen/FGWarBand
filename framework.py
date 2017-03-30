@@ -139,13 +139,14 @@ def view():
         userfolders = os.listdir(bandir)
         for username in userfolders:
             if username != app.loggeduser:
-                userpath = os.path.join(bandir, username)
-                userbands = os.listdir(userpath)
-                bands[username] = []
-                for band in userbands:
-                    loadedband = pickle.load(open(os.path.join(userpath, band), "rb"))
-                    if loadedband['Public'] == "public":
-                        bands[username].append(band)
+                if username != ".DS_Store":
+                    userpath = os.path.join(bandir, username)
+                    userbands = os.listdir(userpath)
+                    bands[username] = []
+                    for band in userbands:
+                        loadedband = pickle.load(open(os.path.join(userpath, band), "rb"))
+                        if loadedband['Public'] == "public":
+                            bands[username].append(band)
         return render_template('publicbandlist.html', bands=bands)
 
 
@@ -211,11 +212,6 @@ def new_warband():
                                 os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"),
                                              app.loggeduser), bandname), "wb"))
         return redirect(url_for("myaccount_page"))
-        # pickle.dump(createdband,
-        #             open(os.path.join(
-        #                 os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "bands"),
-        #                              app.loggeduser), bandname), "wb"))
-        # return redirect(url_for("myaccount_page"))
 
 
 @app.route('/edit', methods=['GET'])

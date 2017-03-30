@@ -70,6 +70,10 @@
         }
         function checkName(name) {
             if(isNaN(name)){
+                if (name == ".DS_Store"){
+                    document.getElementById("accountname").innerHTML = "Account name not suported!";
+                    return false;
+                }
                 {% for users in accounts.keys() %}
                     if (name == "{{ users }}"){
                         document.getElementById("accountname").innerHTML = "Account name not available!";
