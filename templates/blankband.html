@@ -61,23 +61,6 @@
             }
         }
 
-        function addMoney(amount) {
-            if (isNaN(amount)) {
-                notices.innerHTML = "Please input number!"
-            }
-            else {
-                amount = parseInt(amount)
-                if (amount >= 0) {
-                    notices.innerHTML = "";
-                    total += amount;
-                } else {
-                    notices.innerHTML = "Amount must larger than 0!"
-                }
-                showMoney();
-            }
-
-        }
-
         function hireEng() {
             if (engHire == false) {
                 engHire = true;
@@ -441,7 +424,7 @@
 <div id="total">
     <h1>Creating new band!</h1>
     <h3 id="notices" style="color: crimson"></h3>
-    <h2>Warband Name:<input type="text" id="bandnametext" name="bandnametext" required></h2>
+    <h2>Warband Name:<input type="text" style="font-size: large" id="bandnametext" name="bandnametext" required></h2>
     <h3>Set as public?
         <input id="public" type="checkbox" name="public" onClick="public()">
     </h3>

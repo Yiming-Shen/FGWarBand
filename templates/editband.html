@@ -95,12 +95,13 @@
                 bandpub = "private";
             }
         }
-
+{#      To show the currency and call currencyCheck functino#}
         function showMoney() {
             remainingGold.innerHTML = total;
             currencyCheck();
         }
 
+{#        to add currency#}
         function addMoney(amount) {
             if (isNaN(amount)) {
                 notices.innerHTML = "Please input number!";
@@ -117,7 +118,7 @@
             }
 
         }
-
+{#to add captain experience#}
         function addCapexp(amount) {
             if (isNaN(amount)) {
                 notices.innerHTML = "Please input number!";
@@ -134,6 +135,7 @@
             }
         }
 
+{#        to refresh the captain experience and call enableCap()#}
         function capExp() {
             capexp.innerHTML = {{ band['Captain']['Experience'] }} +capadd;
             if (capadd >= 10) {
@@ -143,7 +145,7 @@
                 }
             }
         }
-
+{#to enable/disable the captain stats and skill changing#}
         function enableCap(x) {
             if (x) {
                 if (parseInt(document.getElementById('capfig').innerHTML) < 10) {
@@ -355,7 +357,7 @@
                 countCheck();
             }
         }
-
+{#count current members#}
         function countMembers() {
             var myTable = document.getElementById('rosterTable');
             var num = 0;
@@ -367,6 +369,7 @@
             return num;
         }
 
+{#        check the member number to enable/disable the add of new members#}
         function countCheck() {
             var num = countMembers();
             if (engHire == true) {
@@ -402,6 +405,7 @@
             }
         }
 
+{#        check the currency to enable/disable the save button#}
         function currencyCheck() {
             if (total < 0) {
                 document.getElementById("creator").disabled = true;
@@ -445,6 +449,8 @@
             costslist[row - 1] = cost;
             countCheck();
         }
+
+{#        to update the cost and no refund for the former members#}
         function updateCost(isOld, newcost, oldcost) {
             if (isOld) {
                 total -= newcost;

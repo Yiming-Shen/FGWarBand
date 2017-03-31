@@ -1,5 +1,4 @@
 import httpcodes
-import logging
 import json
 import os
 import pickle
@@ -37,6 +36,7 @@ app.accounts = {'a': 'a', 'b': 'b', 'c': 'c'}
 app.loggeduser = ""
 
 
+# make users directory if not exist. return the dictionary of all user information
 def checkUsers():
     if os.path.isdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), "users")):
         users = pickle.load(
